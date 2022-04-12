@@ -1,5 +1,5 @@
-import { ToastConfig } from '../../models/toast';
+import { TGeneratedToast } from '../../models/toast';
 
 export interface IToastContainerProps {
-  toasts: ToastConfig[];
+  toasts: TGeneratedToast[];
 }

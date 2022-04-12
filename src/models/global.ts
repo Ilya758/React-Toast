@@ -1,5 +1,5 @@
-import { ToastConfig } from './toast';
+import { TGeneratedToast } from './toast';
 
-export interface IStyledProps extends ToastConfig {
+export interface IStyledProps extends TGeneratedToast {
   className?: string;
 }
