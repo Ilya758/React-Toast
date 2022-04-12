@@ -1,51 +1,84 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 import { ToastContainer } from '../components/ToastContainer';
-import { ToastConfig } from '../models/toast';
+import { TGeneratedToast, ToastConfig } from '../models/toast';
+import { v4 as uuid } from 'uuid';
 
 export default class ToastService {
   static instance: ToastService;
 
-  static createToastifyRoot = (): HTMLDivElement => {
+  toasts!: TGeneratedToast[];
+
+  private container!: HTMLDivElement;
+
+  private toastifyRoot!: Root;
+
+  timerMap = new Map<string, { timer: NodeJS.Timeout }>();
+
+  createRoot = (): void => {
     const element = document.createElement('div');
+
     element.setAttribute('id', 'toastify-root');
-    return element;
+
+    this.container = element;
+
+    this.toastifyRoot = createRoot(this.container);
+
+    document.body.appendChild(this.container);
   };
-
-  private _toasts!: ToastConfig[];
-
-  toastifyRoot = ToastService.createToastifyRoot();
 
   constructor() {
     if (typeof ToastService.instance === 'object') return ToastService.instance;
 
-    this._toasts = [];
+    this.toasts = [];
 
     ToastService.instance = this;
+
+    this.createRoot();
 
     return this;
   }
 
-  get toasts() {
-    return this._toasts;
-  }
-
-  getToastifyRoot = (): HTMLDivElement | null =>
-    document.getElementById('toastify-root') as HTMLDivElement;
-
   generateToast = (toastConfig: ToastConfig): void => {
-    this.getToastifyRoot() && this.unmountRoot();
+    const id = uuid();
 
-    this.toasts.push({ ...toastConfig });
+    this.toasts.push({
+      ...toastConfig,
+      id,
+      dequeueCb: this.dequeueTimer,
+      lifetime: 5000,
+    });
 
-    this.toastifyRoot = ToastService.createToastifyRoot();
+    this.renderRoot();
 
-    document.body.appendChild(this.toastifyRoot);
-
-    createRoot(this.toastifyRoot).render(
-      <ToastContainer toasts={this.toasts} />
-    );
+    this.queueTimer(id);
   };
 
-  unmountRoot = (): void => this.toastifyRoot.remove();
+  queueTimer = (id: string): void => {
+    const timerTimeout = setTimeout(() => {
+      this.dequeueTimer(id);
+    }, 5000);
+
+    this.timerMap.set(`${id}`, { timer: timerTimeout });
+  };
+
+  dequeueTimer = (timerId: string) => {
+    const timer = this.timerMap.get(timerId)?.timer as NodeJS.Timeout;
+
+    clearTimeout(timer);
+
+    this.timerMap.delete(timerId);
+
+    this.removeToast(timerId);
+  };
+
+  removeToast = (id: string) => {
+    this.toasts = this.toasts.filter(toast => toast.id !== id);
+
+    this.renderRoot();
+  };
+
+  renderRoot = (): void => {
+    this.toastifyRoot.render(<ToastContainer />);
+  };
 }
