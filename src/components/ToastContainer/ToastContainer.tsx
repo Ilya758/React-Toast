@@ -1,15 +1,24 @@
 import React from 'react';
-import { IToastContainerProps } from './model';
-import { v4 as uuid } from 'uuid';
 import { ToastStyledItem } from '../ToastItem/ToastItem.styles';
 import { ToastList } from './ToastContainer.styles';
+import ToastService from '../../services/ToastService';
 
-export const ToastContainer = ({ toasts }: IToastContainerProps) => {
+export const ToastContainer = () => {
+  const { toasts, dequeueTimer } = new ToastService();
+
   const toastPredicate = toasts.length ? (
     <>
       <ToastList>
-        {toasts.map(({ content }) => {
-          return <ToastStyledItem key={uuid()} content={content} />;
+        {toasts.map(({ content, id, lifetime }) => {
+          return (
+            <ToastStyledItem
+              id={id}
+              key={id}
+              content={content}
+              dequeueCb={dequeueTimer}
+              lifetime={lifetime}
+            />
+          );
         })}
       </ToastList>
     </>
