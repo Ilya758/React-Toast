@@ -4,4 +4,5 @@ export enum COLORS {
   warn = '#f4e048',
   info = '#9a40d3',
   light = '#ffffff',
+  dark = '#000000',
 }

@@ -11,12 +11,13 @@ export const ToastItem = ({
   lifetime,
   phase,
   changeAnimCb,
+  type,
 }: IStyledProps) => {
   const dequeue = (id: string) => () => dequeueCb(id, true);
 
   useEffect(() => {
     const changeToastPhase = (delay: number) =>
-      setTimeout(() => changeAnimCb(id, phase), delay);
+      setTimeout(() => changeAnimCb(id, phase, lifetime), delay);
 
     switch (phase) {
       case 'appear': {
@@ -38,9 +39,9 @@ export const ToastItem = ({
   }, [phase, id, changeAnimCb, lifetime]);
 
   return (
-    <li onClick={dequeue(id)} className={className}>
+    <li className={className} onClick={dequeue(id)}>
       <div className="toast-top__info">
-        <span className="icon-success"></span>
+        <span className={`icon icon-${type}`}></span>
         <p className="toast__text"> {content} </p>
         <button className="button-close"></button>
       </div>

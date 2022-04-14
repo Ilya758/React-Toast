@@ -2,24 +2,41 @@ import React from 'react';
 import { ToastStyledItem } from '../ToastItem/ToastItem.styles';
 import { ToastList } from './ToastContainer.styles';
 import ToastService from '../../services/ToastService';
+import { IListPosition, IToastContainerProps } from './model';
 import { INIT_LIFECYCLE_TIME } from '../../constants/initLifecycleTime';
 
-export const ToastContainer = () => {
-  const { toasts, changeAnimationPhaseForToastById } = new ToastService();
+export const ToastContainer = (props: IToastContainerProps) => {
+  const toastService = new ToastService();
+
+  const {
+    toasts,
+    changeAnimationPhaseForToastById,
+    toastContainerConfig,
+    setToastContainerConfig,
+  } = toastService;
+
+  setToastContainerConfig(props);
 
   const toastPredicate = toasts.length ? (
     <>
-      <ToastList>
-        {toasts.map(({ content, id, lifetime, phase, dequeueCb }) => {
+      <ToastList
+        backColor={toastContainerConfig.backColor as string}
+        position={toastContainerConfig.position as IListPosition}
+      >
+        {toasts.map(({ content, id, lifetime, phase, type, dequeueCb }) => {
+          const { lifetime: containerLifetime } = toastContainerConfig;
+
           return (
             <ToastStyledItem
+              className={type}
               toasts={toasts}
               key={id}
               id={id}
+              type={type}
               phase={phase}
-              content={content}
+              content={content || props.content}
+              lifetime={lifetime || (containerLifetime as number)}
               dequeueCb={dequeueCb}
-              lifetime={lifetime}
               changeAnimCb={changeAnimationPhaseForToastById}
             />
           );
