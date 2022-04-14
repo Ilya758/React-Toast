@@ -29,3 +29,14 @@ export const ToastContainer = () => {
 
   return toastPredicate;
 };
+
+ToastContainer.defaultProps = {
+  content: 'Success!',
+  lifetime: 5000,
+  position: {
+    top: '0.5rem',
+    right: '1rem',
+  },
+  animationType: 'bounce',
+  backColor: '',
+};
