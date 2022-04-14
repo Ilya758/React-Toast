@@ -3,6 +3,8 @@ import { createRoot, Root } from 'react-dom/client';
 import { ToastContainer } from '../components/ToastContainer';
 import { TGeneratedToast, ToastConfig } from '../models/toast';
 import { v4 as uuid } from 'uuid';
+import { ANIM_DELAY } from '../constants/animDelay';
+import { getCurrentToastWithParams } from '../utils/getCurrentToastWithParams';
 
 export default class ToastService {
   static instance: ToastService;
@@ -45,31 +47,70 @@ export default class ToastService {
     this.toasts.push({
       ...toastConfig,
       id,
+      toasts: this.toasts,
+      phase: 'appear',
+      changeAnimCb: this.changeAnimationPhaseForToastById,
       dequeueCb: this.dequeueTimer,
       lifetime: 5000,
     });
 
     this.renderRoot();
-
-    this.queueTimer(id);
   };
 
   queueTimer = (id: string): void => {
     const timerTimeout = setTimeout(() => {
       this.dequeueTimer(id);
-    }, 5000);
+    }, 5000 + ANIM_DELAY);
 
     this.timerMap.set(`${id}`, { timer: timerTimeout });
   };
 
-  dequeueTimer = (timerId: string) => {
-    const timer = this.timerMap.get(timerId)?.timer as NodeJS.Timeout;
+  changeAnimationPhaseForToastById = (id: string, toastPhase: string) => {
+    const { currentToast } = getCurrentToastWithParams(this.toasts, id);
 
-    clearTimeout(timer);
+    if (!currentToast) return;
 
-    this.timerMap.delete(timerId);
+    switch (toastPhase) {
+      case 'appear': {
+        currentToast.phase = 'visible';
 
-    this.removeToast(timerId);
+        this.queueTimer(id);
+
+        break;
+      }
+
+      case 'visible': {
+        currentToast.phase = 'disappear';
+
+        break;
+      }
+
+      case 'disappear': {
+        this.dequeueTimer(id);
+
+        break;
+      }
+    }
+
+    this.renderRoot();
+  };
+
+  dequeueTimer = (timerId: string, removedByClick = false) => {
+    const { currentToast } = getCurrentToastWithParams(this.toasts, timerId);
+
+    (currentToast as TGeneratedToast).phase = 'destroy';
+
+    removedByClick && this.renderRoot();
+
+    setTimeout(() => {
+      const timer = this.timerMap.get(timerId)?.timer as NodeJS.Timeout;
+
+      clearTimeout(timer);
+
+      this.timerMap.delete(timerId);
+
+      this.removeToast(timerId);
+    }, ANIM_DELAY);
   };
 
   removeToast = (id: string) => {
