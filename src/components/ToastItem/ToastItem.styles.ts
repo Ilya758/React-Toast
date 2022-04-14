@@ -1,29 +1,11 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { ToastItem } from './ToastItem';
-
 import success from '@images/svg/icon-success.svg';
 import iconClose from '@images/svg/icon-close.svg';
 import { COLORS } from '../../constants/colors';
 import { TProgressbarParams } from '../../models/toast';
-import { calculateAnimationParams } from '../../utils/calculateAnimationParams';
-
-const progressBarAnimation = (percents: number) => keyframes`
-  0% {
-    width: ${percents}%
-  }
-
-  100% {
-    width: 0%
-  }
-`;
-
-const toastAnimation = (lifetime: number) => {
-  const { percents, seconds } = calculateAnimationParams(lifetime);
-
-  return css`
-    ${seconds}s ${progressBarAnimation(percents)};
-  `;
-};
+import { ANIM_DELAY } from '../../constants/animDelay';
+import { progressBarAnimation, toastAnimation } from './transitionHelpers';
 
 export const ToastStyledItem = styled(ToastItem)`
   position: relative;
@@ -34,7 +16,9 @@ export const ToastStyledItem = styled(ToastItem)`
   font: 400 0.7rem Roboto, sans-serif;
   border-radius: 0.5rem;
   background-color: ${COLORS.success};
+  ${({ phase, toasts, id }) => toastAnimation(phase, toasts, id)};
   cursor: pointer;
+  transition: ${ANIM_DELAY}ms;
 
   & .toast-top {
     &__info {
@@ -83,5 +67,5 @@ export const Progressbar = styled.div<TProgressbarParams>`
   width: 0%;
   height: 0.2rem;
   background-color: ${COLORS.light};
-  animation: ${({ lifetime }) => toastAnimation(lifetime)};
+  animation: ${({ lifetime }) => progressBarAnimation(lifetime)};
 `;
