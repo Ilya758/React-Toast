@@ -1,0 +1,1 @@
+export const INIT_LIFECYCLE_TIME = 5000;
