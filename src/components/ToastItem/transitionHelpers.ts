@@ -7,7 +7,7 @@ import { TRANSITIONS } from './transitions';
 const {
   list,
   progressbar: { shrink },
-  toast: { bounce },
+  toast: { bounce, flip, zoom, rotate },
 } = TRANSITIONS;
 
 export const progressBarAnimation = (lifetime: number) => {
@@ -21,8 +21,28 @@ export const progressBarAnimation = (lifetime: number) => {
 export const toastAnimation = (
   phase: string,
   toasts: TGeneratedToast[],
-  id: string
+  id: string,
+  animationType: string
 ) => {
+  let animation = bounce;
+
+  switch (animationType) {
+    case 'zoom': {
+      animation = zoom;
+      break;
+    }
+
+    case 'flip': {
+      animation = flip;
+      break;
+    }
+
+    case 'rotate': {
+      animation = rotate;
+      break;
+    }
+  }
+
   let needToSlideToTop = false;
 
   const destroyingToastIndex = toasts.findIndex(
@@ -40,7 +60,7 @@ export const toastAnimation = (
   switch (phase) {
     case 'appear': {
       return css`
-        animation: 0.5s ${bounce.onEnter()};
+        animation: 0.5s ${animation()};
       `;
     }
 
@@ -52,7 +72,7 @@ export const toastAnimation = (
                 animation: 0.5s ${list.topSlide()};
               `
             : css`
-                transition: 0.1s;
+                animation: none;
               `}
       `;
     }
@@ -60,7 +80,8 @@ export const toastAnimation = (
     case 'disappear':
     case 'destroy': {
       return css`
-        ${bounce.onExit()}
+        transform: translate(150%, 0);
+        animation: 0.5s ${animation()} reverse;
       `;
     }
   }

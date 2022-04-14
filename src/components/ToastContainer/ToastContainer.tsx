@@ -23,24 +23,38 @@ export const ToastContainer = (props: IToastContainerProps) => {
         backColor={toastContainerConfig.backColor as string}
         position={toastContainerConfig.position as IListPosition}
       >
-        {toasts.map(({ content, id, lifetime, phase, type, dequeueCb }) => {
-          const { lifetime: containerLifetime } = toastContainerConfig;
+        {toasts.map(
+          ({
+            content,
+            id,
+            lifetime,
+            phase,
+            type,
+            animationType,
+            dequeueCb,
+          }) => {
+            const {
+              lifetime: containerLifetime,
+              animationType: containerAnimationType,
+            } = toastContainerConfig;
 
-          return (
-            <ToastStyledItem
-              className={type}
-              toasts={toasts}
-              key={id}
-              id={id}
-              type={type}
-              phase={phase}
-              content={content || props.content}
-              lifetime={lifetime || (containerLifetime as number)}
-              dequeueCb={dequeueCb}
-              changeAnimCb={changeAnimationPhaseForToastById}
-            />
-          );
-        })}
+            return (
+              <ToastStyledItem
+                className={type}
+                toasts={toasts}
+                key={id}
+                id={id}
+                type={type}
+                phase={phase}
+                content={content || props.content}
+                lifetime={lifetime || (containerLifetime as number)}
+                animationType={animationType || containerAnimationType}
+                dequeueCb={dequeueCb}
+                changeAnimCb={changeAnimationPhaseForToastById}
+              />
+            );
+          }
+        )}
       </ToastList>
     </>
   ) : null;

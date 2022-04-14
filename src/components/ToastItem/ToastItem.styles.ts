@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { ToastItem } from './ToastItem';
 import { COLORS } from '../../constants/colors';
-import { TProgressbarParams } from '../../models/toast';
+import { TProgressbarParams, TUnionAnimationType } from '../../models/toast';
 import { ANIM_DELAY } from '../../constants/animDelay';
 import { progressBarAnimation, toastAnimation } from './transitionHelpers';
 
@@ -14,7 +14,8 @@ export const ToastStyledItem = styled(ToastItem)`
   font: 400 0.7rem Roboto, sans-serif;
   border-radius: 0.5rem;
 
-  ${({ phase, toasts, id }) => toastAnimation(phase, toasts, id)};
+  ${({ phase, toasts, id, animationType }) =>
+    toastAnimation(phase, toasts, id, animationType as TUnionAnimationType)};
 
   cursor: pointer;
   transition: ${ANIM_DELAY}ms;

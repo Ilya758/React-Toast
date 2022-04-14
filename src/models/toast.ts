@@ -3,10 +3,12 @@ import { SetStateAction } from 'react';
 export type ToastConfig = {
   content?: string;
   lifetime?: number;
-  animationType?: string;
+  animationType?: TUnionAnimationType;
   backColor?: string;
   type?: string;
 };
+
+export type TUnionAnimationType = 'flip' | 'rotate' | 'bounce' | 'zoom';
 
 export interface IAdditionalProps extends TProgressbarParams {
   toasts: TGeneratedToast[];
