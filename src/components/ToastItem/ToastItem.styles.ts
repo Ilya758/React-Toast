@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import { ToastItem } from './ToastItem';
-import success from '@images/svg/icon-success.svg';
-import iconClose from '@images/svg/icon-close.svg';
 import { COLORS } from '../../constants/colors';
 import { TProgressbarParams } from '../../models/toast';
 import { ANIM_DELAY } from '../../constants/animDelay';
@@ -15,8 +13,9 @@ export const ToastStyledItem = styled(ToastItem)`
   flex-direction: column;
   font: 400 0.7rem Roboto, sans-serif;
   border-radius: 0.5rem;
-  background-color: ${COLORS.success};
+
   ${({ phase, toasts, id }) => toastAnimation(phase, toasts, id)};
+
   cursor: pointer;
   transition: ${ANIM_DELAY}ms;
 
@@ -34,7 +33,6 @@ export const ToastStyledItem = styled(ToastItem)`
     right: 0.5rem;
     width: 0.8rem;
     height: 0.8rem;
-    background: url(${iconClose}) center/contain no-repeat;
     outline: none;
     border: none;
     opacity: 0.6;
@@ -46,17 +44,10 @@ export const ToastStyledItem = styled(ToastItem)`
     }
   }
 
-  & .icon-success {
+  & .icon {
     display: block;
     width: 1.8rem;
     height: 1.8rem;
-    background: url(${success}) center/contain no-repeat;
-  }
-
-  & .toast {
-    &__text {
-      color: ${COLORS.light};
-    }
   }
 `;
 
