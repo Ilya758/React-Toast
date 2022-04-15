@@ -31,6 +31,7 @@ export const ToastContainer = (props: IToastContainerProps) => {
             phase,
             type,
             animationType,
+            backColor,
             dequeueCb,
           }) => {
             const {
@@ -46,6 +47,7 @@ export const ToastContainer = (props: IToastContainerProps) => {
                 id={id}
                 type={type}
                 phase={phase}
+                backColor={backColor}
                 content={content || props.content}
                 lifetime={lifetime || (containerLifetime as number)}
                 animationType={animationType || containerAnimationType}
@@ -70,5 +72,4 @@ ToastContainer.defaultProps = {
     right: '1rem',
   },
   animationType: 'bounce',
-  backColor: '',
 };

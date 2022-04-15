@@ -6,10 +6,7 @@ import iconClose from '@images/svg/icon-close.svg';
 import { COLORS } from '../constants/colors';
 import { css } from 'styled-components';
 
-export const createToastStylesWithType = (
-  toastType: string,
-  backColor: string
-) => {
+export const createToastStylesWithType = (toastType: string) => {
   // TODO: fix a type of an importing icon
   let color = COLORS.light;
 
@@ -39,10 +36,10 @@ export const createToastStylesWithType = (
     }
   }
 
-  const bcgColor = COLORS[toastType as keyof typeof COLORS];
+  const backColor = COLORS[toastType as keyof typeof COLORS];
 
   return css`
-    background-color: ${backColor ? backColor : bcgColor};
+    background-color: ${backColor};
 
     & .icon.icon-${toastType} {
       background: url(${icon}) center/contain no-repeat;
