@@ -4,21 +4,32 @@ import { COLORS } from '../../constants/colors';
 import { TProgressbarParams, TUnionAnimationType } from '../../models/toast';
 import { ANIM_DELAY } from '../../constants/animDelay';
 import { progressBarAnimation, toastAnimation } from './transitionHelpers';
+import { MutableRefObject } from 'react';
+import { TContainerRef } from '../ToastContainer/model';
 
 export const ToastStyledItem = styled(ToastItem)`
-  position: relative;
-  overflow: hidden;
-  padding: 0.6rem;
-  display: flex;
-  flex-direction: column;
-  font: 400 0.7rem Roboto, sans-serif;
-  border-radius: 0.5rem;
+  & .toast__wrapper {
+    position: relative;
+    overflow: hidden;
+    padding: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    font: 400 0.7rem Roboto, sans-serif;
+    border-radius: 0.5rem;
 
-  ${({ phase, toasts, id, animationType }) =>
-    toastAnimation(phase, toasts, id, animationType as TUnionAnimationType)};
+    ${({ phase, toasts, id, animationType, containerRef }) => {
+      return toastAnimation(
+        phase,
+        toasts,
+        id,
+        animationType as TUnionAnimationType,
+        containerRef as MutableRefObject<TContainerRef>
+      );
+    }}
 
-  cursor: pointer;
-  transition: ${ANIM_DELAY}ms;
+    cursor: pointer;
+    transition: ${ANIM_DELAY}ms;
+  }
 
   & .toast-top {
     &__info {

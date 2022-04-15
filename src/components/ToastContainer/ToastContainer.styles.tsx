@@ -22,18 +22,26 @@ export const ToastList = styled.ul<IToastList>`
   list-style-type: none;
 
   & li.success {
-    ${({ backColor }) => createToastStylesWithType('success', backColor)}
+    & .toast__wrapper {
+      ${() => createToastStylesWithType('success')}
+    }
   }
 
   & li.error {
-    ${({ backColor }) => createToastStylesWithType('error', backColor)}
+    & .toast__wrapper {
+      ${() => createToastStylesWithType('error')}
+    }
   }
 
   & li.warn {
-    ${({ backColor }) => createToastStylesWithType('warn', backColor)}
+    & .toast__wrapper {
+      ${() => createToastStylesWithType('warn')}
+    }
   }
 
   & li.info {
-    ${({ backColor }) => createToastStylesWithType('info', backColor)}
+    & .toast__wrapper {
+      ${() => createToastStylesWithType('info')}
+    }
   }
 `;
