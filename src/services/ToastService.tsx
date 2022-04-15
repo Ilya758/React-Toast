@@ -4,7 +4,7 @@ import { ToastContainer } from '../components/ToastContainer';
 import { TGeneratedToast, ToastConfig } from '../models/toast';
 import { v4 as uuid } from 'uuid';
 import { ANIM_DELAY } from '../constants/animDelay';
-import { getCurrentToastWithParams } from '../utils/getCurrentToastWithParams';
+import { getCurrentToastWithParams } from '../utils/getToastParams';
 import { IToastContainerProps } from '../components/ToastContainer/model';
 
 export default class ToastService {

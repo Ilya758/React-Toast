@@ -11,3 +11,12 @@ export const getCurrentToastWithParams = (
     currentToast: toasts.find(predicate),
   };
 };
+
+export const getDestroyingToastParams = (toasts: TGeneratedToast[]) => {
+  const predicate = (toast: TGeneratedToast) => toast.phase === 'destroy';
+
+  return {
+    index: toasts.findIndex(predicate),
+    id: toasts.find(predicate)?.id as string,
+  };
+};

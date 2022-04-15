@@ -1,7 +1,10 @@
 import { css } from 'styled-components';
 import { TGeneratedToast } from '../../models/toast';
 import { calculateAnimationParams } from '../../utils/calculateAnimationParams';
-import { getCurrentToastWithParams } from '../../utils/getCurrentToastWithParams';
+import {
+  getCurrentToastWithParams,
+  getDestroyingToastParams,
+} from '../../utils/getToastParams';
 import { TRANSITIONS } from './transitions';
 
 const {
