@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ToastStyledItem } from '../ToastItem/ToastItem.styles';
 import { ToastList } from './ToastContainer.styles';
 import ToastService from '../../services/ToastService';
-import { IListPosition, IToastContainerProps } from './model';
+import { IListPosition, IToastContainerProps, TContainerRef } from './model';
 import { INIT_LIFECYCLE_TIME } from '../../constants/initLifecycleTime';
 
 export const ToastContainer = (props: IToastContainerProps) => {
@@ -17,12 +17,14 @@ export const ToastContainer = (props: IToastContainerProps) => {
 
   setToastContainerConfig(props);
 
+  const containerRef = useRef<TContainerRef>({});
+
+  const setContainerRef = (id: string) => (ref: HTMLLIElement) =>
+    (containerRef.current[id] = ref);
+
   const toastPredicate = toasts.length ? (
     <>
-      <ToastList
-        backColor={toastContainerConfig.backColor as string}
-        position={toastContainerConfig.position as IListPosition}
-      >
+      <ToastList position={toastContainerConfig.position as IListPosition}>
         {toasts.map(
           ({
             content,
@@ -41,6 +43,8 @@ export const ToastContainer = (props: IToastContainerProps) => {
 
             return (
               <ToastStyledItem
+                ref={setContainerRef(id)}
+                containerRef={containerRef}
                 className={type}
                 toasts={toasts}
                 key={id}

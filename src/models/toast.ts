@@ -1,4 +1,5 @@
-import { SetStateAction } from 'react';
+import { MutableRefObject, SetStateAction } from 'react';
+import { TContainerRef } from '../components/ToastContainer/model';
 
 export type ToastConfig = {
   content?: string;
@@ -6,6 +7,7 @@ export type ToastConfig = {
   animationType?: TUnionAnimationType;
   backColor?: string;
   type?: string;
+  containerRef?: MutableRefObject<TContainerRef>;
 };
 
 export type TUnionAnimationType = 'flip' | 'rotate' | 'bounce' | 'zoom';
