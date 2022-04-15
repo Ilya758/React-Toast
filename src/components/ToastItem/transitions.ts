@@ -10,9 +10,9 @@ const shrink = (percents: number) => keyframes`
   }
 `;
 
-const topSlide = () => keyframes`
+const topSlide = (height: number) => keyframes`
   100% {
-    transform: translate(0, -4.5rem)
+    transform: translate(0, -${height + 16}px)
   }
 
   0% {

@@ -1,10 +1,12 @@
-import { css } from 'styled-components';
+import { MutableRefObject } from 'react';
+import { css, Keyframes } from 'styled-components';
 import { TGeneratedToast } from '../../models/toast';
 import { calculateAnimationParams } from '../../utils/calculateAnimationParams';
 import {
   getCurrentToastWithParams,
   getDestroyingToastParams,
 } from '../../utils/getToastParams';
+import { TContainerRef } from '../ToastContainer/model';
 import { TRANSITIONS } from './transitions';
 
 const {
@@ -21,12 +23,7 @@ export const progressBarAnimation = (lifetime: number) => {
   `;
 };
 
-export const toastAnimation = (
-  phase: string,
-  toasts: TGeneratedToast[],
-  id: string,
-  animationType: string
-) => {
+const switchToastAnimation = (animationType: string) => {
   let animation = bounce;
 
   switch (animationType) {
@@ -46,20 +43,19 @@ export const toastAnimation = (
     }
   }
 
-  let needToSlideToTop = false;
+  return animation;
+};
 
-  const destroyingToastIndex = toasts.findIndex(
-    toast => toast.phase === 'destroy'
-  );
+const getClientRectParams = (destroyingEl: HTMLLIElement) => {
+  return destroyingEl.getBoundingClientRect().height;
+};
 
-  if (destroyingToastIndex >= 0) {
-    const currentToastIndex = getCurrentToastWithParams(toasts, id).index;
-
-    if (currentToastIndex > destroyingToastIndex) {
-      needToSlideToTop = true;
-    }
-  }
-
+const applyStyles = (
+  phase: string,
+  animation: () => Keyframes,
+  needToSlideToTop: boolean,
+  height: number
+) => {
   switch (phase) {
     case 'appear': {
       return css`
@@ -72,7 +68,7 @@ export const toastAnimation = (
         ${() =>
           needToSlideToTop
             ? css`
-                animation: 0.5s ${list.topSlide()};
+                animation: 0.5s ${list.topSlide(height)};
               `
             : css`
                 animation: none;
@@ -88,4 +84,37 @@ export const toastAnimation = (
       `;
     }
   }
+};
+
+export const toastAnimation = (
+  phase: string,
+  toasts: TGeneratedToast[],
+  id: string,
+  animationType: string,
+  containerRef: MutableRefObject<TContainerRef>
+) => {
+  const animation = switchToastAnimation(animationType);
+
+  let needToSlideToTop = false;
+
+  let height = 0;
+
+  const { id: destroyingElementId, index: destroyingToastIndex } =
+    getDestroyingToastParams(toasts);
+
+  if (destroyingToastIndex >= 0) {
+    const currentToastIndex = getCurrentToastWithParams(toasts, id).index;
+
+    if (currentToastIndex > destroyingToastIndex) {
+      const destroyingEl = containerRef.current[
+        destroyingElementId as keyof MutableRefObject<TContainerRef>
+      ] as HTMLLIElement;
+
+      height = getClientRectParams(destroyingEl);
+
+      needToSlideToTop = true;
+    }
+  }
+
+  return applyStyles(phase, animation, needToSlideToTop, height);
 };
