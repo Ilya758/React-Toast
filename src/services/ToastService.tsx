@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { ANIM_DELAY } from '../constants/animDelay';
 import { getCurrentToastWithParams } from '../utils/getToastParams';
 import { IToastContainerProps } from '../components/ToastContainer/model';
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
 export default class ToastService {
   // TODO: add private field
@@ -139,6 +140,10 @@ export default class ToastService {
     this.renderRoot(containerConfig);
 
   renderRoot = (containerConfig?: ToastConfig): void => {
-    this.toastifyRoot.render(<ToastContainer {...containerConfig} />);
+    this.toastifyRoot.render(
+      <ErrorBoundary>
+        <ToastContainer {...containerConfig} />
+      </ErrorBoundary>
+    );
   };
 }

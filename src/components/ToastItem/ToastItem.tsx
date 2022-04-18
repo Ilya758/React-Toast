@@ -1,6 +1,7 @@
 import React, { forwardRef, LegacyRef, useEffect } from 'react';
 import { ANIM_DELAY } from '../../constants/animDelay';
 import { IStyledProps } from '../../models/global';
+import { useErrorBoundary } from '../../utils/hooks/useErrorBoundary';
 import { Progressbar } from './ToastItem.styles';
 
 export const ToastItem = forwardRef(
@@ -18,7 +19,15 @@ export const ToastItem = forwardRef(
     }: IStyledProps,
     ref: LegacyRef<HTMLLIElement>
   ) => {
-    const dequeue = (id: string) => () => dequeueCb(id, true);
+    const { triggerError } = useErrorBoundary();
+
+    const dequeue = (id: string) => () => {
+      try {
+        dequeueCb(id, true);
+      } catch (error) {
+        triggerError(error as Error);
+      }
+    };
 
     useEffect(() => {
       const changeToastPhase = (delay: number) =>
