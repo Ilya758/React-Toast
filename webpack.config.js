@@ -11,7 +11,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 const PATHS = {
   src: path.join(__dirname, 'src'),
   dist: path.join(__dirname, './dist'),
-  assets: path.join(__dirname, './public/assets'),
+  assets: path.join(__dirname, 'src/assets'),
 };
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
   output: {
     filename: `[name].js`,
     path: PATHS.dist,
-    assetModuleFilename: 'static/[name][hash][ext]',
+    assetModuleFilename: 'static/[name][ext]',
   },
   resolve: {
     extensions: [
