@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ToastItem } from './ToastItem';
 import { COLORS } from '../../constants/colors';
 import { TProgressbarParams, TUnionAnimationType } from '../../models/toast';
@@ -61,6 +61,16 @@ export const ToastStyledItem = styled(ToastItem)`
     width: 1.8rem;
     height: 1.8rem;
   }
+
+  ${({ icon }) => {
+    if (icon) {
+      return css`
+        & #icon {
+          background: url(${icon}) center/contain no-repeat;
+        }
+      `;
+    }
+  }}
 `;
 
 export const Progressbar = styled.div<TProgressbarParams>`

@@ -35,6 +35,7 @@ export const ToastContainer = (props: IToastContainerProps) => {
             animationType,
             backColor,
             dequeueCb,
+            icon,
           }) => {
             const {
               lifetime: containerLifetime,
@@ -57,6 +58,7 @@ export const ToastContainer = (props: IToastContainerProps) => {
                 animationType={animationType || containerAnimationType}
                 dequeueCb={dequeueCb}
                 changeAnimCb={changeAnimationPhaseForToastById}
+                icon={icon}
               />
             );
           }

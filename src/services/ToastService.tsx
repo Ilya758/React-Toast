@@ -99,14 +99,13 @@ export default class ToastService {
       case 'visible': {
         currentToast.phase = 'disappear';
 
-        break;
-      }
-
-      case 'disappear': {
         this.dequeueTimer(id);
 
         break;
       }
+
+      default:
+        break;
     }
 
     this.renderWithConfig(this.toastContainerConfig);

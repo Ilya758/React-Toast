@@ -10,8 +10,10 @@ export interface IToastList {
 }
 
 export interface IListPosition {
-  top: string;
-  right: string;
+  top?: string;
+  right?: string;
+  bottom?: string;
+  left?: string;
 }
 
 export type TContainerRef = {

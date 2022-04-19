@@ -8,6 +8,7 @@ export type ToastConfig = {
   backColor?: string;
   type?: string;
   containerRef?: MutableRefObject<TContainerRef>;
+  icon?: string;
 };
 
 export type TUnionAnimationType = 'flip' | 'rotate' | 'bounce' | 'zoom';

@@ -57,7 +57,7 @@ export const ToastItem = forwardRef(
       <li ref={ref} className={className} onClick={dequeue(id)}>
         <div className="toast__wrapper" style={{ backgroundColor: backColor }}>
           <div className="toast-top__info">
-            <span className={`icon icon-${type}`}></span>
+            <span id="icon" className={`icon icon-${type}`}></span>
             <p className="toast__text"> {content} </p>
             <button className="button-close"></button>
           </div>

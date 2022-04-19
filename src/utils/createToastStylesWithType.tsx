@@ -49,7 +49,6 @@ export const createToastStylesWithType = (toastType: string) => {
       &__text {
         flex: 1;
         color: ${color};
-        word-break: break-all;
       }
     }
 

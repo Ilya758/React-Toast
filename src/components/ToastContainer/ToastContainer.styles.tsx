@@ -5,11 +5,25 @@ import { IToastList } from './model';
 export const ToastList = styled.ul<IToastList>`
   position: absolute;
 
-  ${({ position: { top, right } }) => {
-    return css`
-      top: ${top};
-      right: ${right};
+  ${({ position: { top, right, bottom, left } }) => {
+    const positions = [{ top }, { right }, { bottom }, { left }];
+    const anyPositionIsSet = !!positions.find(pos => pos);
+
+    const mapPosition = css`
+      ${() =>
+        positions.map(pos => {
+          const [key, prop] = Object.entries(pos)[0];
+
+          if (prop) return `${key}: ${prop};`;
+        })}
     `;
+
+    const defaultPosition = css`
+      top: 0.5rem;
+      right: 1rem;
+    `;
+
+    return anyPositionIsSet ? mapPosition : defaultPosition;
   }}
 
   margin: 0;
