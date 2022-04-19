@@ -1,7 +1,10 @@
 import { ToastConfig } from '../../models/toast';
 
 export interface IToastContainerProps
-  extends Omit<Partial<ToastConfig>, 'backColor' | 'type' | 'containerRef'> {
+  extends Omit<
+    Partial<ToastConfig>,
+    'backColor' | 'type' | 'containerRef' | 'icon'
+  > {
   position: IListPosition;
 }
 
