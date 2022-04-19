@@ -54,12 +54,42 @@ export default class ToastService {
     return this;
   }
 
+  generateSuccessfulToast = (toastConfig?: ToastConfig) =>
+    this.generateToast({
+      ...toastConfig,
+      type: 'success',
+      content: toastConfig?.content || 'Success!',
+    });
+
+  generateErrorToast = (toastConfig?: ToastConfig) =>
+    this.generateToast({
+      ...toastConfig,
+      type: 'error',
+      content: toastConfig?.content || 'There is something happened!',
+    });
+
+  generateWarnToast = (toastConfig?: ToastConfig) =>
+    this.generateToast({
+      type: 'warn',
+      content:
+        toastConfig?.content || "Please be sure you've done right thing!",
+      ...toastConfig,
+    });
+
+  generateInfoToast = (toastConfig?: ToastConfig) =>
+    this.generateToast({
+      type: 'info',
+      content: toastConfig?.content || 'Some sort of information',
+      ...toastConfig,
+    });
+
   generateToast = (toastConfig?: ToastConfig): void => {
     const id = uuid();
 
     this.toasts.push({
       ...toastConfig,
       id,
+      type: toastConfig?.type || 'success',
       toasts: this.toasts,
       phase: 'appear',
       changeAnimCb: this.changeAnimationPhaseForToastById,
