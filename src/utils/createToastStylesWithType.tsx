@@ -40,6 +40,7 @@ export const createToastStylesWithType = (toastType: string) => {
 
   return css`
     background-color: ${backColor};
+    list-style-type: none;
 
     & .icon.icon-${toastType} {
       background: url(${icon}) center/contain no-repeat;

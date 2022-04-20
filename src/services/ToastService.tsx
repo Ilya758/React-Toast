@@ -7,6 +7,7 @@ import { ANIM_DELAY } from '../constants/animDelay';
 import { getCurrentToastWithParams } from '../utils/getToastParams';
 import { IToastContainerProps } from '../components/ToastContainer/model';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
+import { INIT_LIFECYCLE_TIME } from '../constants/initLifecycleTime';
 
 export default class ToastService {
   // TODO: add private field
@@ -90,14 +91,18 @@ export default class ToastService {
       ...toastConfig,
       id,
       type: toastConfig?.type || 'success',
-      toasts: this.toasts,
       phase: 'appear',
-      changeAnimCb: this.changeAnimationPhaseForToastById,
       dequeueCb: this.dequeueTimer,
       lifetime: toastConfig?.lifetime as number,
     });
 
     this.renderWithConfig(this.toastContainerConfig);
+
+    this.changeAnimationPhaseForToastById(
+      id,
+      'appear',
+      (toastConfig?.lifetime as number) || INIT_LIFECYCLE_TIME
+    );
   };
 
   queueTimer = (id: string, lifetime: number): void => {
@@ -117,21 +122,35 @@ export default class ToastService {
 
     if (!currentToast) return;
 
+    const changeAnimation = () =>
+      this.changeAnimationPhaseForToastById(id, currentToast.phase, lifetime);
+
     switch (toastPhase) {
       case 'appear': {
-        currentToast.phase = 'visible';
+        setTimeout(() => {
+          currentToast.phase = 'visible';
 
-        this.queueTimer(id, lifetime);
+          changeAnimation();
 
+          this.queueTimer(id, lifetime);
+        }, ANIM_DELAY);
         break;
       }
 
       case 'visible': {
-        currentToast.phase = 'disappear';
+        setTimeout(() => {
+          currentToast.phase = 'disappear';
 
-        this.dequeueTimer(id);
+          changeAnimation();
+        }, lifetime);
 
         break;
+      }
+
+      case 'disappear': {
+        currentToast.phase = 'destroy';
+
+        this.dequeueTimer(id);
       }
 
       default:

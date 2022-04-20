@@ -8,12 +8,8 @@ import { INIT_LIFECYCLE_TIME } from '../../constants/initLifecycleTime';
 export const ToastContainer = (props: IToastContainerProps) => {
   const toastService = new ToastService();
 
-  const {
-    toasts,
-    changeAnimationPhaseForToastById,
-    toastContainerConfig,
-    setToastContainerConfig,
-  } = toastService;
+  const { toasts, toastContainerConfig, setToastContainerConfig } =
+    toastService;
 
   setToastContainerConfig(props);
 
@@ -36,6 +32,7 @@ export const ToastContainer = (props: IToastContainerProps) => {
             backColor,
             dequeueCb,
             icon,
+            position,
           }) => {
             const {
               lifetime: containerLifetime,
@@ -47,9 +44,9 @@ export const ToastContainer = (props: IToastContainerProps) => {
                 ref={setContainerRef(id)}
                 containerRef={containerRef}
                 className={type}
-                toasts={toasts}
                 key={id}
                 id={id}
+                position={position}
                 type={type}
                 phase={phase}
                 backColor={backColor}
@@ -57,7 +54,6 @@ export const ToastContainer = (props: IToastContainerProps) => {
                 lifetime={lifetime || (containerLifetime as number)}
                 animationType={animationType || containerAnimationType}
                 dequeueCb={dequeueCb}
-                changeAnimCb={changeAnimationPhaseForToastById}
                 icon={icon}
               />
             );

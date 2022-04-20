@@ -1,6 +1,6 @@
 import { MutableRefObject } from 'react';
 import { css, Keyframes } from 'styled-components';
-import { TGeneratedToast } from '../../models/toast';
+import ToastService from '../../services/ToastService';
 import { calculateAnimationParams } from '../../utils/calculateAnimationParams';
 import {
   getCurrentToastWithParams,
@@ -81,6 +81,7 @@ const applyStyles = (
       return css`
         transform: translate(150%, 0);
         animation: 0.5s ${animation()} reverse;
+        opacity: 0;
       `;
     }
   }
@@ -88,7 +89,6 @@ const applyStyles = (
 
 export const toastAnimation = (
   phase: string,
-  toasts: TGeneratedToast[],
   id: string,
   animationType: string,
   containerRef: MutableRefObject<TContainerRef>
@@ -98,6 +98,8 @@ export const toastAnimation = (
   let needToSlideToTop = false;
 
   let height = 0;
+
+  const { toasts } = new ToastService();
 
   const { id: destroyingElementId, index: destroyingToastIndex } =
     getDestroyingToastParams(toasts);
