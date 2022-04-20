@@ -1,13 +1,31 @@
 import styled, { css } from 'styled-components';
-import { ToastItem } from './ToastItem';
 import { COLORS } from '../../constants/colors';
 import { TProgressbarParams, TUnionAnimationType } from '../../models/toast';
 import { ANIM_DELAY } from '../../constants/animDelay';
 import { progressBarAnimation, toastAnimation } from './transitionHelpers';
 import { MutableRefObject } from 'react';
 import { TContainerRef } from '../ToastContainer/model';
+import { ToastItem } from './ToastItem';
+import { createToastStylesWithType } from '../../utils/createToastStylesWithType';
+import { setToastPosition } from '../../utils/setToastPosition';
 
 export const ToastStyledItem = styled(ToastItem)`
+  & {
+    ${({ position }) => {
+      if (!position) return;
+
+      return setToastPosition(position);
+    }}
+
+    list-style-type: none;
+    width: 100%;
+    max-width: 13rem;
+  }
+
+  & .toast__wrapper {
+    ${({ type }) => createToastStylesWithType(type as string)}
+  }
+
   & .toast__wrapper {
     position: relative;
     overflow: hidden;
@@ -17,10 +35,9 @@ export const ToastStyledItem = styled(ToastItem)`
     font: 400 0.7rem Roboto, sans-serif;
     border-radius: 0.5rem;
 
-    ${({ phase, toasts, id, animationType, containerRef }) => {
+    ${({ phase, id, animationType, containerRef }) => {
       return toastAnimation(
         phase,
-        toasts,
         id,
         animationType as TUnionAnimationType,
         containerRef as MutableRefObject<TContainerRef>
