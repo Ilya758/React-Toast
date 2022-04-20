@@ -5,14 +5,12 @@ export interface IToastContainerProps
     Partial<ToastConfig>,
     'backColor' | 'type' | 'containerRef' | 'icon'
   > {
-  position: IListPosition;
+  position: IToastPosition;
 }
 
-export interface IToastList {
-  position: IListPosition;
-}
+export type TToastList = Pick<IToastContainerProps, 'position'>;
 
-export interface IListPosition {
+export interface IToastPosition {
   top?: string;
   right?: string;
   bottom?: string;

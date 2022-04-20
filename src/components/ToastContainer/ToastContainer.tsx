@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { ToastStyledItem } from '../ToastItem/ToastItem.styles';
 import { ToastList } from './ToastContainer.styles';
 import ToastService from '../../services/ToastService';
-import { IListPosition, IToastContainerProps, TContainerRef } from './model';
+import { IToastPosition, IToastContainerProps, TContainerRef } from './model';
 import { INIT_LIFECYCLE_TIME } from '../../constants/initLifecycleTime';
 
 export const ToastContainer = (props: IToastContainerProps) => {
@@ -20,7 +20,7 @@ export const ToastContainer = (props: IToastContainerProps) => {
 
   const toastPredicate = toasts.length ? (
     <>
-      <ToastList position={toastContainerConfig.position as IListPosition}>
+      <ToastList position={toastContainerConfig.position as IToastPosition}>
         {toasts.map(
           ({
             content,
