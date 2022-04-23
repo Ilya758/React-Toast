@@ -9,16 +9,15 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 const PATHS = {
-  src: path.join(__dirname, 'src'),
+  src: path.join(__dirname, './src'),
   dist: path.join(__dirname, './dist'),
-  assets: path.join(__dirname, 'src/assets'),
+  assets: path.join(__dirname, './src/assets'),
 };
 
 module.exports = {
-  context: PATHS.src,
   mode: 'development',
   entry: {
-    main: ['@babel/polyfill', './index.tsx'],
+    main: ['@babel/polyfill', './example/index.tsx'],
   },
   output: {
     filename: `[name].js`,
@@ -39,7 +38,8 @@ module.exports = {
       '.tsx',
     ],
     alias: {
-      '@images': `${PATHS.assets}`,
+      '@images': `${PATHS.assets}/`,
+      '@src': `${PATHS.src}/`,
     },
   },
   devServer: {
@@ -75,8 +75,8 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       title: 'Webpack',
-      template: '../public/index.html',
-      favicon: '../public/favicon.ico',
+      template: './public/index.html',
+      favicon: './public/favicon.ico',
     }),
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
