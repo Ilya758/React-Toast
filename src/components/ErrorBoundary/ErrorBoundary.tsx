@@ -34,7 +34,12 @@ export default class ErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return <h3>Sorry, something went wrong! Please, reload the page.</h3>;
+      return (
+        <h3>
+          Sorry, something went wrong or you have forgotten to include a
+          ToastContainer-component! Please, reload the page.
+        </h3>
+      );
     }
 
     return (

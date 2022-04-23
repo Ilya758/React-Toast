@@ -1,5 +1,4 @@
 import React from 'react';
-import { createRoot, Root } from 'react-dom/client';
 import { ToastContainer } from '../components/ToastContainer';
 import { TGeneratedToast, ToastConfig } from '../models/toast';
 import { v4 as uuid } from 'uuid';
@@ -8,18 +7,17 @@ import { getCurrentToastWithParams } from '../utils/getToastParams';
 import { IToastContainerProps } from '../components/ToastContainer/model';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 import { INIT_LIFECYCLE_TIME } from '../constants/initLifecycleTime';
+import ReactDOM from 'react-dom';
 
 export default class ToastService {
   // TODO: add private field
-  static instance: ToastService;
+  private static instance: ToastService;
 
   toasts!: TGeneratedToast[];
 
   private container!: HTMLDivElement;
 
-  private toastifyRoot!: Root;
-
-  timerMap = new Map<string, { timer: NodeJS.Timeout }>();
+  private timerMap = new Map<string, { timer: NodeJS.Timeout }>();
 
   private _toastContainerConfig!: IToastContainerProps;
 
@@ -31,14 +29,12 @@ export default class ToastService {
     this._toastContainerConfig = config;
   };
 
-  createRoot = (): void => {
+  private createRoot = (): void => {
     const element = document.createElement('div');
 
     element.setAttribute('id', 'toastify-root');
 
     this.container = element;
-
-    this.toastifyRoot = createRoot(this.container);
 
     document.body.appendChild(this.container);
   };
@@ -105,7 +101,7 @@ export default class ToastService {
     );
   };
 
-  queueTimer = (id: string, lifetime: number): void => {
+  private queueTimer = (id: string, lifetime: number): void => {
     const timerTimeout = setTimeout(() => {
       this.dequeueTimer(id);
     }, lifetime + ANIM_DELAY);
@@ -113,7 +109,7 @@ export default class ToastService {
     this.timerMap.set(`${id}`, { timer: timerTimeout });
   };
 
-  changeAnimationPhaseForToastById = (
+  private changeAnimationPhaseForToastById = (
     id: string,
     toastPhase: string,
     lifetime: number
@@ -160,7 +156,7 @@ export default class ToastService {
     this.renderWithConfig(this.toastContainerConfig);
   };
 
-  dequeueTimer = (timerId: string, removedByClick = false) => {
+  private dequeueTimer = (timerId: string, removedByClick = false) => {
     const { currentToast } = getCurrentToastWithParams(this.toasts, timerId);
 
     (currentToast as TGeneratedToast).phase = 'destroy';
@@ -178,20 +174,21 @@ export default class ToastService {
     }, ANIM_DELAY);
   };
 
-  removeToast = (id: string) => {
+  private removeToast = (id: string) => {
     this.toasts = this.toasts.filter(toast => toast.id !== id);
 
     this.renderWithConfig(this.toastContainerConfig);
   };
 
-  renderWithConfig = (containerConfig: IToastContainerProps) =>
+  private renderWithConfig = (containerConfig: IToastContainerProps) =>
     this.renderRoot(containerConfig);
 
-  renderRoot = (containerConfig?: ToastConfig): void => {
-    this.toastifyRoot.render(
+  private renderRoot = (containerConfig?: ToastConfig): void => {
+    ReactDOM.render(
       <ErrorBoundary>
-        <ToastContainer {...containerConfig} />
-      </ErrorBoundary>
+        <ToastContainer {...containerConfig} />,
+      </ErrorBoundary>,
+      this.container
     );
   };
 }
