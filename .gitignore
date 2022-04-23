@@ -1,5 +1,4 @@
 node_modules
 dist
 storybook-static
-cypress
-cypress.json
+lib
