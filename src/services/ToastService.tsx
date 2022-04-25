@@ -10,7 +10,6 @@ import { INIT_LIFECYCLE_TIME } from '../constants/initLifecycleTime';
 import ReactDOM from 'react-dom';
 
 export default class ToastService {
-  // TODO: add private field
   private static instance: ToastService;
 
   toasts!: TGeneratedToast[];
@@ -186,7 +185,7 @@ export default class ToastService {
   private renderRoot = (containerConfig?: ToastConfig): void => {
     ReactDOM.render(
       <ErrorBoundary>
-        <ToastContainer {...containerConfig} />,
+        <ToastContainer {...containerConfig} />
       </ErrorBoundary>,
       this.container
     );

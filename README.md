@@ -2,6 +2,14 @@
 
 ## Welcome to your personal bubbling notifications!
 
+### The link to npm-package
+
+```
+https://www.npmjs.com/package/react-toast-lib
+```
+
+---
+
 ### To run a dev-server type
 
 ```
@@ -38,7 +46,7 @@ npm run cypress:open
 
 ```tsx
 // example in App.tsx
-import { initializeToastify, ToastContainer } from 'react-toast-777';
+import { initializeToastify, ToastContainer } from 'react-toast-lib';
 
 const { generateToast } = initializeToastify(); // it creates an instance of ToastService
 
@@ -89,4 +97,3 @@ export default App;
 - icon: URI-path/picture module - set an icon of a toast
 
 ---
-

@@ -7,10 +7,9 @@ import { COLORS } from '../constants/colors';
 import { css } from 'styled-components';
 
 export const createToastStylesWithType = (toastType: string) => {
-  // TODO: fix a type of an importing icon
   let color = COLORS.light;
 
-  let icon;
+  let icon = success;
 
   switch (toastType) {
     case 'success': {
